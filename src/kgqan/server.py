@@ -1,3 +1,4 @@
+import logging
 import kgqan.nltk_setup
 import traceback
 import argparse
@@ -16,7 +17,6 @@ max_Es = 10
 max_answers = 41
 limit_VQuery = 600
 limit_EQuery = 300
-
 
 class MyServer(BaseHTTPRequestHandler):
 
@@ -83,15 +83,15 @@ class MyServer(BaseHTTPRequestHandler):
         return json.dumps(objs)
 
     def do_POST(self):
-        print("In post ")
-        print(self.request)
+        logger.log_info("In post ")
+        logger.log_info(self.request)
         try:
             content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
             post_data = self.rfile.read(content_length)  # <--- Gets the data itself
-            print("Before parsing ", post_data)
+            logger.log_info("Before parsing %s" % post_data)
             # fix_bytes_value = post_data.replace(b"'", b'"')
             data = json.load(io.BytesIO(post_data))
-            print("After parsing ", data)
+            logger.log_info("After parsing %s" % data)
         except:
             self.send_error(500, "Failed to parse data from request")
 
@@ -109,15 +109,14 @@ class MyServer(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(result, "utf-8"))
         except Exception as e:
-            print("Error from : ", e)
-            print("Stack trace")
+            logger.log_info("Error from : %s" % e)
+            logger.log_info("Stack trace")
             traceback.print_exc()
             self.send_error(500, "Failed to get the answer to the question")
 
 def main():
     webServer = HTTPServer((hostName, serverPort), MyServer)
     logger.log_info("Server started http://%s:%s" % (hostName, serverPort))
-    print("Server started http://%s:%s" % (hostName, serverPort))
 
     try:
         webServer.serve_forever()
@@ -125,7 +124,7 @@ def main():
         pass
 
     webServer.server_close()
-    print("Server stopped.")
+    logger.log_info("Server stopped.")
 
 if __name__ == "__main__":
     main()
