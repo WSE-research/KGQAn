@@ -118,14 +118,36 @@ class MyServer(BaseHTTPRequestHandler):
             traceback.print_exc()
             self.send_error(500, "Failed to get the answer to the question")
 
-def main():
-    webServer = HTTPServer((hostName, serverPort), MyServer)
-    logger.log_info("Server started http://%s:%s" % (hostName, serverPort))
 
-    try:
-        webServer.serve_forever()
-    except KeyboardInterrupt:
-        pass
+
+
+def main():
+    logger.log_info("Checking connection to word embedding server ... ")
+    wait_interval = int(os.environ["WORD_EMBEDDING_CONNECTION_WAIT_INTERVAL"])
+    max_tries = int(os.environ["WORD_EMBEDDING_CONNECTION_MAX_ATTEMPTS"])
+    connected = False
+    for i in range(max_tries):
+        try:
+            logger.log_info(f"Waiting {wait_interval} seconds for the word embedding server to respond.")
+            time.sleep(wait_interval)
+            sim = w2v.n_similarity(['intel'], ['intel', '80486dx'])
+            # if this succeeds, then the server is responding properly
+            logger.log_info("Word embedding server responding.")
+            connected = True
+            break
+        except:
+            logger.log_info(f"Word embedding server not responding after attempt {i+1} of {max_tries}.")
+
+    if connected:
+        webServer = HTTPServer((hostName, serverPort), MyServer)
+        logger.log_info("Server started http://%s:%s" % (hostName, serverPort))
+
+        try:
+            webServer.serve_forever()
+        except KeyboardInterrupt:
+            pass
+    else:
+        raise RuntimeError(f"Could not connect to word embedding server after {max_tries * wait_interval} seconds!")
 
     webServer.server_close()
     logger.log_info("Server stopped.")

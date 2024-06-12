@@ -12,16 +12,9 @@ fi
 
 case "$1" in
     server)
-        echo "Waiting for word_embedding_server to load model"
-        waittime=300
-        sleep $waittime && echo "waited for 300 sec, till word_embd_server loaded model"
         python -m kgqan.server
         ;;
     evaluation)
-        echo "Waiting for word_embedding_server to load model"
-        waittime=300
-        sleep $waittime && echo "waited for 300 sec, till word_embd_server loaded model"
-
         output_path="evaluation/output"
         mkdir -p "$output_path"
 
