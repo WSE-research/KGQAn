@@ -6,8 +6,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import io
 import os
+import time
 from kgqan.kgqan import KGQAn
 from kgqan.logger import logger
+from kgqan.sparql_end_points import knowledge_graph_to_uri
+import kgqan.embeddings_client as w2v
 
 hostName = "0.0.0.0"
 serverPort = 8899
@@ -97,7 +100,8 @@ class MyServer(BaseHTTPRequestHandler):
 
         try:
             MyKGQAn = KGQAn(n_max_answers=max_answers, n_max_Vs=max_Vs, n_max_Es=max_Es,
-                            n_limit_VQuery=limit_VQuery, n_limit_EQuery=limit_EQuery)
+                            n_limit_VQuery=limit_VQuery, n_limit_EQuery=limit_EQuery,
+                            knowledge_graph_to_uri=knowledge_graph_to_uri)
             # TODO should be removed
             #if data['question'].lower() == 'when did the boston tea party take place and who was it led by?':
             #    result = self.running_example_answer()

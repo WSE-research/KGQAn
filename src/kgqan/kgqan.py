@@ -48,7 +48,10 @@ import networkx as nx
 
 # TODO check best place to have these updates and send either uri or key according to usecase
 
-knowledge_graph_to_uri = {
+
+# default knowledge graph URIs
+# TODO: think about how to take this out entirely 
+knowledge_graph_uri_mapping = {
     "dbpedia": "http://206.12.95.86:8890/sparql",
     "lc_quad": "http://206.12.95.86:8891/sparql",
     "microsoft_academic": "http://206.12.97.159:8890/sparql",
@@ -83,7 +86,8 @@ class KGQAn:
         n_max_Es: int = 10,
         n_limit_VQuery=400,
         n_limit_EQuery=400,
-        filtration_enabled: bool = True
+        filtration_enabled: bool = True,
+        knowledge_graph_to_uri: dict = knowledge_graph_uri_mapping
     ):
         self.target_variable = None
         self._ss_server = semantic_affinity_server
@@ -98,6 +102,8 @@ class KGQAn:
         self.lemmatizer = WordNetLemmatizer()
         self.connected_predicates = 0
         self.filteration_enabled = filtration_enabled
+        #self.knowledge_graph_to_uri = set_knowledge_graph_endpoints()
+        self.knowledge_graph_to_uri = knowledge_graph_to_uri
 
         cprint(
             f"== Execution settings : Max no. answers == {self._n_max_answers}, "
@@ -139,11 +145,11 @@ class KGQAn:
         self.n_max_Es = n_max_Es if n_max_Es else self.n_max_Es
         if knowledge_graph in ["open_citations"]:
             self.sparql_end_point = XML_EndPoint(
-                knowledge_graph, knowledge_graph_to_uri[knowledge_graph], self.filteration_enabled
+                knowledge_graph, self.knowledge_graph_to_uri[knowledge_graph], self.filteration_enabled
             )
         else:
             self.sparql_end_point = EndPoint(
-                knowledge_graph, knowledge_graph_to_uri[knowledge_graph], self.filteration_enabled
+                knowledge_graph, self.knowledge_graph_to_uri[knowledge_graph], self.filteration_enabled
             )
 
         self.detect_question_and_answer_type()
@@ -317,9 +323,9 @@ class KGQAn:
 
             try:
                 uris, names = self.sparql_end_point.get_names_and_uris(entity_query)
-            except:
+            except Exception as e:
                 logger.log_error(
-                    f"Error at 'extract_possible_V_and_E' method with v_query value of {entity_query} "
+                    f"Error at 'extract_possible_V_and_E' method with v_query value of {entity_query}:\n{e} "
                 )
                 continue
 

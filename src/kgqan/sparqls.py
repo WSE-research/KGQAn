@@ -32,7 +32,7 @@ resource_URI = 'http://dbpedia.org/resource/United_States_Secretary_of_the_Inter
 
 
 def make_keyword_search_query_with_type(keywords_string: str, limit=100):
-    return f"select ?uri ?label ?type where {{ ?uri ?p ?label . ?label  <bif:contains> '{keywords_string}' . " \
+    return f"select ?uri ?label ?type where {{ ?uri ?p ?label . ?label  bif:contains '{keywords_string}' . " \
            f"{{ select ?uri (MIN(STR(?auxType)) as ?type) where {{  ?uri {RDF_TYPE}  ?auxType  " \
            f"filter (?auxType != {RDFS_CONCEPT}) }} group by  ?uri }} }} LIMIT {limit}"
 
@@ -40,7 +40,7 @@ def make_keyword_search_query_with_type(keywords_string: str, limit=100):
 def make_keyword_unordered_search_query_with_type_simple(keywords_string: str, limit=500):
     kws = ' AND '.join(keywords_string.strip().split())
     return f"select distinct ?uri  ?label " \
-           f"where {{ ?uri ?p  ?label . ?label  <bif:contains> '{kws}' . }}  LIMIT {limit}"
+           f"where {{ ?uri ?p  ?label . ?label  bif:contains '{kws}' . }}  LIMIT {limit}"
 
 # TODO its calling is removed for now till having a way of dealing with each KG with its compatible queries
 def make_keyword_unordered_search_query_with_type_simple_for_open_citations(keywords_string: str, limit=500):
@@ -68,7 +68,7 @@ def make_keyword_unordered_search_query_with_type_ms(keywords_string: str, limit
                 kwlist.append(w)
     kws = ' AND '.join(kwlist)
     return f"select distinct ?uri  ?label " \
-               f"where {{ ?uri ?p ?label. ?label  <bif:contains> '{kws}' . }}  LIMIT {limit}"
+               f"where {{ ?uri ?p ?label. ?label  bif:contains '{kws}' . }}  LIMIT {limit}"
 
 def make_keyword_unordered_search_query_with_type(keywords_string: str, limit=500):
     keywords_string = keywords_string.replace(',', '')
@@ -88,9 +88,9 @@ def make_keyword_unordered_search_query_with_type(keywords_string: str, limit=50
             else:
                 kwlist.append(w)
     kws = ' AND '.join(kwlist)
-    return f"prefix rdf: <http://www.w3.org/2000/01/rdf-schema#> " \
+    return f"prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> " \
            f"select distinct ?uri  ?label " \
-           f"where {{ ?uri rdf:label ?label. ?label  <bif:contains> '{kws}' . }}  LIMIT {limit}"
+           f"where {{ ?uri rdfs:label ?label. ?label  bif:contains '{kws}' . }}  LIMIT {limit}"
 
 
 def make_Ms_academic_query(keywords_string: str, limit=500):
@@ -112,7 +112,7 @@ def make_Ms_academic_query(keywords_string: str, limit=500):
                 kwlist.append(w)
     kws = ' AND '.join(kwlist)
     return f"select distinct ?uri  ?label " \
-           f"where {{ ?uri ?p ?label. ?label  <bif:contains> '{kws}' . }}  LIMIT {limit}"
+           f"where {{ ?uri ?p ?label. ?label  bif:contains '{kws}' . }}  LIMIT {limit}"
 
 # TODO its calling is removed for now till having a way of dealing with each KG with its compatible queries
 def make_keyword_unordered_search_query_with_type_fact_forge(keywords_string: str, limit=500):

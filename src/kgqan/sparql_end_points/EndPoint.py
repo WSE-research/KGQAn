@@ -6,6 +6,7 @@ import re
 from urllib.parse import urlparse
 from termcolor import cprint
 import kgqan.sparqls as sparqls
+from kgqan.logger import logger
 
 
 class EndPoint:
@@ -56,7 +57,8 @@ class EndPoint:
         return True, v_result, True, types
 
     def get_names_and_uris(self, entity_query):
-        entity_result = json.loads(self.evaluate_SPARQL_query(entity_query))
+        query_result = self.evaluate_SPARQL_query(entity_query)
+        entity_result = json.loads(query_result)
         uris, names = self.extract_resource_name(entity_result["results"]["bindings"])
         return uris, names
 

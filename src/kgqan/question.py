@@ -18,7 +18,7 @@ import os
 import networkx as nx
 from termcolor import cprint
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from kgqan.seq2seq import seq2seq_model 
+from kgqan.seq2seq import seq2seq_model
 from kgqan.logger import logger
 
 model = None
