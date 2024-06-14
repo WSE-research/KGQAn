@@ -9,7 +9,8 @@ WORKDIR app
 RUN git clone https://github.com/IntuitionEngineeringTeam/chars2vec.git
 RUN mv chars2vec/chars2vec/* chars2vec
 
-RUN useradd appuser && chown -R appuser /app
-USER appuser
+#RUN useradd appuser && chown -R appuser /app
+#USER appuser
 
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["python", "server.py"]

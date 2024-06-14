@@ -18,12 +18,12 @@ urls=(
 data_dir="./data"
 mkdir -p "$data_dir"
 
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1QbT5FDOJtdVd7AqZ-ekwUh2_pn6nNpb3' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1QbT5FDOJtdVd7AqZ-ekwUh2_pn6nNpb3" -O output_pred21_8_30.zip && rm -rf /tmp/cookies.txt
+wget --load-cookies /tmp/cookies.txt "https://drive.usercontent.google.com/download?id=1QbT5FDOJtdVd7AqZ-ekwUh2_pn6nNpb3&export=download&confirm=t" -O output_pred21_8_30.zip && rm -rf /tmp/cookies.txt
 file_name="output_pred21_8_30.zip"
 cp $file_name $data_dir/
 unzip "$data_dir/$file_name" -d "$data_dir"
 rm "$data_dir/$file_name" # remove the zip
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=149tB7x_dYLfmwoEdCfKfjBNeGdqFvqOP' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=149tB7x_dYLfmwoEdCfKfjBNeGdqFvqOP" -O wiki-news-300d-1M.zip && rm -rf /tmp/cookies.txt
+wget --load-cookies /tmp/cookies.txt "https://drive.usercontent.google.com/download?id=1UTPGv8QUgqSVQ2JeX9QVW0YhbGRxONLL&export=download&confirm=t" -O wiki-news-300d-1M.zip && rm -rf /tmp/cookies.txt
 file_name="wiki-news-300d-1M.zip"
 cp $file_name $data_dir/
 unzip "$data_dir/$file_name" -d "$data_dir"

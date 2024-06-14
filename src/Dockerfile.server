@@ -36,4 +36,6 @@ ENV ALLENNLP_CACHE_ROOT="./allen"
 
 # RUN python nltk_setup.py
 # CMD ["tail", "-f", "/dev/null"]
-ENTRYPOINT ["./run.sh", "server"]
+#ENTRYPOINT ["./run.sh", "server"]
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["./run.sh", "server"]
