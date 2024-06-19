@@ -3,8 +3,6 @@
 data_dir="/app/data"
 data_name="wiki-news-300d-1M"
 
-ls -la $data_dir
-
 echo "downloading $data_name"
 
 if [ -d $data_dir ]; then
