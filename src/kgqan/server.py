@@ -21,6 +21,10 @@ max_answers = 41
 limit_VQuery = 600
 limit_EQuery = 300
 
+WORD_EMBEDDING_CONNECTION_WAIT_INTERVAL= int(os.getenv("WORD_EMBEDDING_CONNECTION_WAIT_INTERVAL", 30))
+WORD_EMBEDDING_CONNECTION_MAX_ATTEMPTS= int(os.getenv("WORD_EMBEDDING_CONNECTION_MAX_ATTEMPTS", 10))
+
+
 class MyServer(BaseHTTPRequestHandler):
 
     def running_example_answer(self):
@@ -123,8 +127,8 @@ class MyServer(BaseHTTPRequestHandler):
 
 def main():
     logger.log_info("Checking connection to word embedding server ... ")
-    wait_interval = int(os.environ["WORD_EMBEDDING_CONNECTION_WAIT_INTERVAL"])
-    max_tries = int(os.environ["WORD_EMBEDDING_CONNECTION_MAX_ATTEMPTS"])
+    wait_interval = WORD_EMBEDDING_CONNECTION_WAIT_INTERVAL
+    max_tries = WORD_EMBEDDING_CONNECTION_MAX_ATTEMPTS
     connected = False
     for i in range(max_tries):
         try:
