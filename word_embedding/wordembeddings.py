@@ -1,3 +1,4 @@
+import gc
 import string
 import os
 import sys
@@ -26,7 +27,7 @@ class WordEmbeddings:
             vectors = {}
             for line in f:
                 vals = line.rstrip().split(" ")
-                vectors[vals[0]] = [float(x) for x in vals[1:]]
+                vectors[vals[0]] = [np.float16(x) for x in vals[1:]]
 
         vocab_size = len(words)
         vocab = {w: idx for idx, w in enumerate(words)}
@@ -40,11 +41,16 @@ class WordEmbeddings:
             if word == "<unk>":
                 continue
             W[vocab[word], :] = v
+        W = W.astype(np.float16)
 
         # normalize each word vector to unit variance
-        W_norm = np.zeros(W.shape)
+        W_norm = np.zeros(W.shape).astype(np.float16)
         d = np.sum(W**2, 1) ** (0.5)
         W_norm = (W.T / d).T
+        W_norm = W_norm.astype(np.float16)
+        print(W_norm.dtype)
+        del W
+        print(gc.collect())
         return (W_norm, vocab, ivocab)
 
     def semantic_distance(self, v1, v2):
